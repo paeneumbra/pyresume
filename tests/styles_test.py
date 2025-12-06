@@ -27,7 +27,7 @@ class TestStylePaths:
         style = getattr(css_styles, style_attr)
         expected_path = ASSETS_DIR / "styles" / filename
 
-        assert style == str(expected_path), f"{style_attr} path mismatch"
+        assert style == expected_path, f"{style_attr} path mismatch"
         assert Path(style).exists(), f"{filename} file does not exist"
 
 

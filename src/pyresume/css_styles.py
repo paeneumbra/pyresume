@@ -33,17 +33,17 @@ class CssStyles:
         print(" >", "\n > ".join(style_names))
 
     @property
-    def bar_style(self) -> str:
-        return str(self.get_style_path("bar-style"))
+    def bar_style(self) -> Path:
+        return self.get_style_path("bar-style")
 
     @property
-    def divider_style(self) -> str:
-        return str(self.get_style_path("divider-style"))
+    def divider_style(self) -> Path:
+        return self.get_style_path("divider-style")
 
     @property
-    def simple_style(self) -> str:
-        return str(self.get_style_path("simple-style"))
+    def simple_style(self) -> Path:
+        return self.get_style_path("simple-style")
 
     @property
-    def default_style(self) -> str:
-        return str(self.get_style_path(self.DEFAULT_STYLE_NAME))
+    def default_style(self) -> Path:
+        return self.get_style_path(self.DEFAULT_STYLE_NAME)

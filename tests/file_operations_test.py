@@ -44,7 +44,7 @@ class TestMarkdownExtensionReplacement:
         ],
     )
     def test_successful_replacement(self, input_name, expected):
-        pdf_path = FileOperations.replace_extensions_markdown_for_pdf(input_name)
+        pdf_path = FileOperations.replace_extension_with_pdf(input_name)
         assert pdf_path == expected
 
     @pytest.mark.parametrize(
@@ -57,10 +57,9 @@ class TestMarkdownExtensionReplacement:
     )
     def test_failure_for_non_markdown_file(self, invalid_file):
         with pytest.raises(
-            ValueError,
-            match=r"File must be from type markdown, instead \.[a-z]+ was found",
+            ValueError, match=r"File must be markdown type.*found \.\w+"
         ):
-            FileOperations.replace_extensions_markdown_for_pdf(invalid_file)
+            FileOperations.replace_extension_with_pdf(invalid_file)
 
 
 class TestBuildOutputPath:
@@ -73,8 +72,7 @@ class TestBuildOutputPath:
 
     def test_failure_for_non_markdown_extension(self):
         with pytest.raises(
-            ValueError,
-            match=r"File must be from type markdown, instead \.[a-z]+ was found",
+            ValueError, match=r"File must be markdown type.*found \.\w+"
         ):
             FileOperations.build_output_path(Path("some-name.bak"))
 

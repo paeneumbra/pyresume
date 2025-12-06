@@ -46,7 +46,7 @@ class PdfGenerator:
 
         return FileOperations.build_output_path(input_path)
 
-    def generate_pdf(self, style_path: str, markdown_path: Union[str, Path]) -> Path:
+    def generate_pdf(self, style_path: Path, markdown_path: Union[str, Path]) -> Path:
         """Generate PDF file using a given style based on a markdown file"""
         FileOperations.assert_file_exists(style_path)
         FileOperations.assert_file_exists(markdown_path)
@@ -67,7 +67,7 @@ class PdfGenerator:
         except Exception as e:
             raise ValueError(f"PDF generation failed: {e}")
 
-    def to_pdf(self, style_path: str, markdown_path: Union[str, Path]) -> Path:
+    def to_pdf(self, style_path: Path, markdown_path: Union[str, Path]) -> Path:
         """Generate PDF"""
         try:
             return self.generate_pdf(style_path, markdown_path)

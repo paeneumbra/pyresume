@@ -77,8 +77,7 @@ class TestGeneratePdfWithCustomInput:
         input_file = PROJECT_ROOT / "tests" / "data" / "non-compliant-file.mk"
 
         with pytest.raises(
-            ValueError,
-            match=r"File must be from type markdown, instead \.[a-z]+ was found",
+            ValueError, match=r"File must be markdown type.*found \.\w+"
         ):
             pdf_generator.generate_pdf(css_styles.divider_style, input_file)
 
