@@ -57,7 +57,11 @@ repos:
         verbose: true
       - id: pytest
         name: run tests
-        entry: uv run pytest pyresume/tests/
+        entry: uv run pytest tests/
         language: system
         pass_filenames: false
         verbose: true
+      - id: ty-check
+        name: ty-check
+        language: system
+        entry: uv run ty check

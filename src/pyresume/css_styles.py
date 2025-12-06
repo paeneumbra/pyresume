@@ -1,13 +1,13 @@
 from pathlib import Path
 from typing import List
 
-from pyresume.settings import STYLES_DIR
+from pyresume.settings import ASSETS_DIR
 
 
 class CssStyles:
     """Manages CSS style files"""
 
-    styles_dir = Path(STYLES_DIR)
+    styles_dir = ASSETS_DIR / "styles"
     DEFAULT_STYLE_NAME = "simple-style"
 
     @classmethod

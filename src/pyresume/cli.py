@@ -1,11 +1,10 @@
 import argparse
 import sys
 
-from css_styles import CssStyles
-from file_operations import FileOperations
-from version import __version__
-
+from pyresume.css_styles import CssStyles
+from pyresume.file_operations import FileOperations
 from pyresume.pdf_generator import PdfGenerator
+from pyresume.version import __version__
 
 
 def build_parser():

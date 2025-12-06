@@ -1,9 +1,7 @@
-import glob
-import os
 from datetime import datetime
 from pathlib import Path
 
-from pyresume.settings import MODULE_DIR, OUTPUT_DIR
+from pyresume.settings import OUTPUT_DIR
 
 
 class FileOperations:
@@ -33,18 +31,16 @@ class FileOperations:
             )
 
     @classmethod
-    def build_output_path(cls, path: Path):
+    def build_output_path(cls, path: Path) -> Path:
         """Build new filename for pdf file"""
         pdf_filename = cls.replace_extensions_markdown_for_pdf(path.name)
-        return os.path.join(OUTPUT_DIR, pdf_filename)
+        return OUTPUT_DIR / pdf_filename
 
     @staticmethod
     def remove_pdf_files_from_output_dir():
         """Remove PDF files from output dir if some exist"""
-        output_pdfs = glob.glob(f"{MODULE_DIR}/../output/*.pdf")
-        if output_pdfs:
-            for pdf in output_pdfs:
-                os.remove(pdf)
+        for pdf in OUTPUT_DIR.glob("*.pdf"):
+            pdf.unlink()
 
     @staticmethod
     def build_timestamped_filename(prefix: str = "resume") -> str:

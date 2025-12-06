@@ -83,16 +83,16 @@ tasks:
     deps: [assert]
     desc: Simple resume
     cmds:
-      - uv run pyresume/cli.py -simple
+      - uv run src/pyresume/cli.py -simple
 
   resume_bar:
     deps: [assert]
     desc: Bar resume
     cmds:
-      - uv run pyresume/cli.py -bar
+      - uv run src/pyresume/cli.py -bar
 
   resume_divider:
     deps: [assert]
     desc: Divider resume
     cmds:
-      - uv run pyresume/cli.py -divider
+      - uv run src/pyresume/cli.py -divider

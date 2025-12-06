@@ -26,26 +26,26 @@ Instructions for setup can be found in the [taskfile](./taskfile.yaml)
 To generate a resume:
 
 1. Place your resume file in `./pyresume/assets` as `resume.md`
-2. Select a style from [style folder](./pyresume/assets/styles/) if none is selected defaults to [simple style](pyresume/assets/styles/simple-style.css)
-3. Run the execution command from the examples below, like `make resume-simple`, or `uv run pyresume/cli.py -bar`
+2. Select a style from [style folder](src/pyresume/assets/styles/) if none is selected defaults to [simple style](src/pyresume/assets/styles/simple-style.css)
+3. Run the execution command from the examples below, like `make resume-simple`, or `uv run src/pyresume/cli.py -bar`
 4. Find the pdf resume under [output folder](./output)
 
 - Use uv, available style options are `-simple`, `-bar`, `-divider`
 
 ```shell
-uv run pyresume/cli.py -simple
+uv run src/pyresume/cli.py -simple
 ```
 
 - Run with path to your own css style
 
 ```shell
-uv run pyresume/cli.py --style {{path/to/user/style.css}}
+uv run src/pyresume/cli.py --style {{path/to/user/style.css}}
 ```
 
 - Run with path to your PDF file
 
 ```shell
-uv run pyresume/cli.py --md {{path/to/user/file.md}}
+uv run src/pyresume/cli.py --md {{path/to/user/file.md}}
 ```
 
 ### Tests
