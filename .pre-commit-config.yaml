@@ -8,7 +8,7 @@ default_stages:
 repos:
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-case-conflict
       - id: check-executables-have-shebangs
@@ -20,13 +20,13 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.8.3
+    rev: v4.10.0
     hooks:
       - id: commitizen
         stages: [commit-msg]
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.18.1
+    rev: v0.19.1
     hooks:
       - id: markdownlint-cli2
         args:
@@ -36,12 +36,12 @@ repos:
         exclude: '^(CHANGELOG.md)$'
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.7.12
+    rev: 0.9.16
     hooks:
       - id: uv-lock
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.13
+    rev: v0.14.8
     hooks:
       - id: ruff
         args: [--fix]
