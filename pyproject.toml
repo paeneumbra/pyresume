@@ -1,6 +1,6 @@
 [project]
 name = "pyresume"
-version = "4.0.2"
+version = "4.0.3"
 description = "My python approach to building my resume from markdown"
 authors = [{ name = "Itzalak", email = "itzalak@tuta.io" }]
 readme = "README.md"

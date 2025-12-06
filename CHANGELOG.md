@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.3 (2025-12-06)
+
+### Changed
+
+- Add comments and cleanup
+- refactor according to current preferences
+
+### Tools
+
+- bump pre commit and uv
+
 ## v4.0.2 (2025-06-10)
 
 ### Tools
