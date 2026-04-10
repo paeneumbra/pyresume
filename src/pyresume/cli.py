@@ -1,115 +1,120 @@
-import argparse
-import sys
+"""Command-line interface using Typer."""
+
 from pathlib import Path
 
-from pyresume.css_styles import CssStyles
-from pyresume.file_operations import FileOperations
-from pyresume.pdf_generator import PdfGenerator
-from pyresume.version import __version__
+import typer
+
+from pyresume.convert import generate_pdf
+from pyresume.themes import list_themes, resolve_css
+
+app = typer.Typer(
+    help="Convert markdown resume to PDF with customizable CSS themes.",
+    no_args_is_help=False,
+)
 
 
-def build_parser() -> argparse.ArgumentParser:
-    """Build argument parser"""
+@app.command()
+def main(
+    markdown: Path | None = typer.Argument(
+        None,
+        help="Path to markdown resume file",
+        exists=True,
+    ),
+    minimal: bool = typer.Option(
+        False,
+        "--minimal",
+        help="Use minimal theme",
+    ),
+    clean: bool = typer.Option(
+        False,
+        "--clean",
+        help="Use clean theme",
+    ),
+    slate: bool = typer.Option(
+        False,
+        "--slate",
+        help="Use slate theme",
+    ),
+    css: str | None = typer.Option(
+        None,
+        "--css",
+        help="Path to custom CSS file",
+    ),
+    list_available: bool = typer.Option(
+        False,
+        "--list",
+        help="List available themes and exit",
+    ),
+) -> None:
+    """Convert markdown resume to PDF with customizable CSS themes."""
+    if list_available:
+        typer.echo("Available themes:")
+        for theme in list_themes():
+            typer.echo(f"  - {theme}")
+        raise typer.Exit()
 
-    parser = argparse.ArgumentParser(
-        prog="pyresume",
-        description="Generate a PDF resume from a markdown file",
-    )
+    # If no markdown provided, launch TUI
+    if markdown is None:
+        from pyresume.app import run_tui
 
-    # Style options (mutually exclusive)
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument(
-        "-c", "--css", type=Path, metavar="FILE", help="path to custom CSS style file"
-    )
-    group.add_argument(
-        "-simple", action="store_true", help="use simple style (default)"
-    )
-    group.add_argument(
-        "-bar", action="store_true", help="use style with colored bar headers"
-    )
-    group.add_argument(
-        "-divider", action="store_true", help="use style with colored divider"
-    )
+        run_tui()
+        return
 
-    # Utility options (mutually exclusive with styles)
-    group.add_argument(
-        "-l", "--list", action="store_true", help="list all available styles"
-    )
-    group.add_argument(
-        "-r",
-        "--remove",
-        action="store_true",
-        help="remove all PDF files from output directory",
-    )
-    group.add_argument(
-        "-v", "--version", action="store_true", help="show version and exit"
-    )
+    # Determine which theme flag was set
+    theme_flags = [minimal, clean, slate]
+    theme_names = ["minimal", "clean", "slate"]
+    active_themes = [name for flag, name in zip(theme_flags, theme_names) if flag]
 
-    # Input markdown file
-    parser.add_argument(
-        "-m", "--md", type=Path, metavar="FILE", help="path to markdown resume file"
-    )
-
-    return parser
-
-
-def handle_special_flags(args: argparse.Namespace) -> None:
-    """Handle standalone operations that exit immediately"""
-    if args.version:
-        print(f"pyresume {__version__}")
-        sys.exit(0)
-
-    if args.list:
-        CssStyles.print_styles()
-        sys.exit(0)
-
-    if args.remove:
-        files_removed = FileOperations.remove_pdf_files_from_output_dir()
-        print(
-            f"All PDF files removed from output directory - removed {files_removed} files"
+    if len(active_themes) > 1:
+        typer.echo(
+            typer.style(
+                "Error: Only one theme flag can be used at a time",
+                fg=typer.colors.RED,
+            )
         )
-        sys.exit(0)
+        raise typer.Exit(1)
 
+    if css and active_themes:
+        typer.echo(
+            typer.style(
+                "Error: Cannot use both --css and a theme flag",
+                fg=typer.colors.RED,
+            )
+        )
+        raise typer.Exit(1)
 
-def handle_style(args: argparse.Namespace) -> Path:
-    """Determine which CSS style to use based on arguments
-
-    Returns:
-        Path to CSS file (either custom or built-in style)
-    """
-    css_styles = CssStyles()
-
-    if args.css:
-        return args.css
-    if args.bar:
-        return css_styles.bar_style
-    if args.divider:
-        return css_styles.divider_style
-    if args.simple:
-        return css_styles.simple_style
-
-    print("No style specified. Using simple style.")
-    return css_styles.simple_style
-
-
-def main() -> None:
-    """Main entry point for CLI"""
-    parser = build_parser()
-    args = parser.parse_args()
-
-    handle_special_flags(args)
-
-    pdf_generator = PdfGenerator()
-    markdown_file = args.md or pdf_generator.default_resume_path
-    css_style = handle_style(args)
-
+    # Resolve CSS path
+    theme = active_themes[0] if active_themes else "minimal"
     try:
-        pdf_generator.to_pdf(css_style, markdown_file)
-        print("✓ PDF generated successfully")
+        css_path = resolve_css(theme=theme if not css else None, css_path=css)
+    except (ValueError, FileNotFoundError) as e:
+        typer.echo(typer.style(f"Error: {e}", fg=typer.colors.RED))
+        raise typer.Exit(1)
+
+    # Generate PDF
+    try:
+        output_path = generate_pdf(
+            markdown_path=markdown,
+            css_path=css_path,
+        )
+        typer.echo(
+            typer.style(
+                f"✓ PDF generated: {output_path}",
+                fg=typer.colors.GREEN,
+            )
+        )
+    except (FileNotFoundError, ValueError) as e:
+        typer.echo(typer.style(f"Error: {e}", fg=typer.colors.RED))
+        raise typer.Exit(1)
     except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
+        typer.echo(
+            typer.style(
+                f"Error: Failed to generate PDF: {e}",
+                fg=typer.colors.RED,
+            )
+        )
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":
-    main()
+    app()

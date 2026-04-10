@@ -128,9 +128,15 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Jetbrains
+# IDE
 .idea
+.vscode
+
+# AI
+.claude/
+.junie/
+docs/
 
 # Private data
 /output/*
-/src/pyresume/assets/resume.md
+/src/pyresume/resources/resume.md

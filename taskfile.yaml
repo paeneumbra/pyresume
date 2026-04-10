@@ -26,29 +26,24 @@ tasks:
     silent: true
     internal: true
     vars:
-      REQUIRED_TOOLS: pre-commit, uv
+      REQUIRED_TOOLS: prek, uv
 
   setup:
     deps: [assert]
-    desc: Set up uv and pre-commit
+    desc: Set up uv and prek
     cmds:
-      - task: precommit_setup
+      - prek install
+      - prek auto-update
       - uv sync
 
   update:
     deps: [assert]
-    desc: Update uv and pre-commit
+    desc: Update uv and prek
     cmds:
       - task: uv_update
-      - pre-commit autoupdate
-
-  precommit_setup:
-    internal: true
-    deps: [assert]
-    desc: Initialize pre-commit
-    cmds:
-      - pre-commit install
-      - pre-commit autoupdate
+      - prek auto-update
+      - prek cache gc
+      - prek validate-config
 
   uv_update:
     internal: true
@@ -62,15 +57,9 @@ tasks:
   run:
     aliases: [pre_commit_run]
     deps: [assert]
-    desc: Run pre-commit on all files
+    desc: Run prek on all files
     cmds:
-      - pre-commit run --color always --all-files
-
-  uv:
-    deps: [assert]
-    desc: Refresh uv environment
-    cmds:
-      - uv sync
+      - prek run --color always --all-files
 
   test:
     aliases: [uv_test]
@@ -79,20 +68,20 @@ tasks:
     cmds:
       - uv run pytest
 
-  resume_simple:
+  resume_minimal:
     deps: [assert]
-    desc: Simple resume
+    desc: Generate example resume with minimal theme
     cmds:
-      - uv run src/pyresume/cli.py -simple
+      - uv run pyresume src/pyresume/resources/example-resume.md --minimal
 
-  resume_bar:
+  resume_clean:
     deps: [assert]
-    desc: Bar resume
+    desc: Generate example resume with clean theme
     cmds:
-      - uv run src/pyresume/cli.py -bar
+      - uv run pyresume src/pyresume/resources/example-resume.md --clean
 
-  resume_divider:
+  resume_slate:
     deps: [assert]
-    desc: Divider resume
+    desc: Generate example resume with slate theme
     cmds:
-      - uv run src/pyresume/cli.py -divider
+      - uv run pyresume src/pyresume/resources/example-resume.md --slate

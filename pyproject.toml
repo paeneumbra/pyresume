@@ -8,31 +8,23 @@ keywords = ["curriculum", "resume"]
 license = "MIT"
 requires-python = ">=3.13"
 dependencies = [
-  "pytest >= 8.3.3",
-  "md2pdf >= 1.0.1",
-  "toml >= 0.10.2",
+    "typer >= 0.9.0",
+    "weasyprint >= 60.0",
+    "markdown >= 3.5.0",
+    "inquirerpy>=0.3.4",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[project.scripts]
+pyresume = "pyresume.cli:app"
 
 [build-system]
 requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
-
-[tool.ruff]
-exclude = [
-    ".direnv",
-    ".git",
-    ".pytest_cache",
-    ".ruff_cache",
-    ".venv",
-    ".vscode",
-    "__pypackages__",
-    "_build",
-    "venv",
-]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
 
 [tool.commitizen]
 name = "cz_customize"
@@ -43,11 +35,23 @@ update_changelog_on_bump = true
 version_provider = "uv"
 
 [tool.commitizen.customize]
-schema = "<type>: <body>"
-schema_pattern = "(bump|break|feat|chore|tools|docs|fix):(\\s.*)"
-bump_pattern = "^(bump|break|feat|chore|tools|fix)"
-bump_map = { "break" = "MAJOR", "feat" = "MINOR", "chore" = "PATCH", "tools" = "PATCH", "fix" = "PATCH", "docs" = "PATCH" }
-change_type_order = ["break", "feat", "fix", "chore", "tools", "docs"]
-commit_parser = "^(?P<change_type>break|feat|chore|tools|docs|fix):\\s(?P<message>.*)?"
-changelog_pattern = "^(break|feat|chore|tools|docs|fix)?(!)?"
-change_type_map = { "break" = "Breaking Change", "feat" = "Changed", "fix" = "Fixed", "chore" = "Changed", "tools" = "Tools", "docs" = "Notes" }
+schema = "<type>[(scope)]: <message>"
+schema_pattern = "^(break|feat|fix|docs|chore)(\\([^()\\r\\n]+\\))?(!)?:\\s.*"
+bump_pattern = "^(break|feat|fix|chore)"
+bump_map = { "break" = "MAJOR", "feat" = "MINOR", "fix" = "PATCH", "chore" = "PATCH" }
+commit_parser = "^(?P<change_type>feat|fix|break|docs|chore)(?:\\((?P<scope>[^()\\r\\n]*)\\))?(?P<breaking>!)?:\\s(?P<message>.*)?"
+changelog_pattern = "^(break|feat|fix|chore|docs)"
+change_type_order = [
+    "⚠️ Breaking Change",
+    "🚀 New Feature",
+    "🧹 Chore",
+    "🐛 Fix",
+    "📚 Documentation",
+]
+
+[tool.commitizen.customize.change_type_map]
+break = "⚠️ Breaking Change"
+feat = "🚀 New Feature"
+chore = "🧹 Chore"
+fix = "🐛 Fix"
+docs = "📚 Documentation"
