@@ -40,29 +40,33 @@ def test_cli_help():
     assert "markdown" in result.stdout.lower()
 
 
-def test_cli_with_markdown_default_theme(markdown_file, tmp_path):
+def test_cli_with_markdown_default_theme(markdown_file, tmp_path, monkeypatch):
     """Test CLI with markdown file and default theme."""
+    monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, [str(markdown_file)])
     assert result.exit_code == 0
     assert "PDF generated" in result.stdout
 
 
-def test_cli_with_minimal_theme(markdown_file):
+def test_cli_with_minimal_theme(markdown_file, tmp_path, monkeypatch):
     """Test CLI with --minimal theme."""
+    monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, [str(markdown_file), "--minimal"])
     assert result.exit_code == 0
     assert "PDF generated" in result.stdout
 
 
-def test_cli_with_clean_theme(markdown_file):
+def test_cli_with_clean_theme(markdown_file, tmp_path, monkeypatch):
     """Test CLI with --clean theme."""
+    monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, [str(markdown_file), "--clean"])
     assert result.exit_code == 0
     assert "PDF generated" in result.stdout
 
 
-def test_cli_with_custom_css(markdown_file, css_file):
+def test_cli_with_custom_css(markdown_file, css_file, tmp_path, monkeypatch):
     """Test CLI with custom CSS file."""
+    monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, [str(markdown_file), "--css", str(css_file)])
     assert result.exit_code == 0
     assert "PDF generated" in result.stdout

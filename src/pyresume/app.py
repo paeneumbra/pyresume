@@ -6,20 +6,21 @@ from InquirerPy import inquirer
 from rich.console import Console
 from rich.status import Status
 
-from pyresume.convert import PROJECT_ROOT, generate_pdf
+from pyresume.convert import generate_pdf
 from pyresume.themes import list_themes, resolve_css
 
 console = Console()
 
 
 def find_markdown_files() -> list[Path]:
-    """Find all markdown files in the project, excluding .venv and hidden dirs."""
+    """Find all markdown files under CWD, excluding .venv and hidden dirs."""
+    cwd = Path.cwd()
     return sorted(
         p
-        for p in PROJECT_ROOT.rglob("*.md")
+        for p in cwd.rglob("*.md")
         if not any(
             part.startswith(".") or part in ("venv", ".venv")
-            for part in p.relative_to(PROJECT_ROOT).parts
+            for part in p.relative_to(cwd).parts
         )
     )
 
@@ -33,11 +34,10 @@ def run_tui() -> None:
         console.print("[red]No markdown files found in project.[/]")
         return
 
+    cwd = Path.cwd()
     markdown_path: Path = inquirer.select(
         message="Resume file:",
-        choices=[
-            {"name": str(p.relative_to(PROJECT_ROOT)), "value": p} for p in md_files
-        ],
+        choices=[{"name": str(p.relative_to(cwd)), "value": p} for p in md_files],
     ).execute()
 
     # Step 2: pick theme

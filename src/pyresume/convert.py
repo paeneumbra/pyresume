@@ -6,9 +6,6 @@ from pathlib import Path
 import markdown
 from weasyprint import HTML, CSS
 
-# Project root: go up from src/pyresume -> src -> project root
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-
 
 def markdown_to_html(markdown_path: Path) -> str:
     """Convert markdown file to HTML string."""
@@ -59,7 +56,7 @@ def generate_pdf(
 
     if output_path is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = PROJECT_ROOT / f"{markdown_path.stem}_{timestamp}.pdf"
+        output_path = Path.cwd() / f"{markdown_path.stem}_{timestamp}.pdf"
 
     html_content = markdown_to_html(markdown_path)
     html = HTML(string=html_content)

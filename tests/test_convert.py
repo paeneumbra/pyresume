@@ -59,13 +59,13 @@ def test_generate_pdf_without_css(markdown_file, tmp_path):
     assert result.exists()
 
 
-def test_generate_pdf_default_output_path(markdown_file):
-    """Test default output path (project root with timestamp)."""
-    from pyresume.convert import PROJECT_ROOT
-
+def test_generate_pdf_default_output_path(markdown_file, tmp_path, monkeypatch):
+    """Test default output path (CWD with timestamp)."""
+    monkeypatch.chdir(tmp_path)
     result = generate_pdf(markdown_file)
-    assert result.parent == PROJECT_ROOT
-    assert result.stem.startswith(markdown_file.stem)
-    assert result.suffix == ".pdf"
-    # Cleanup
-    result.unlink()
+    try:
+        assert result.parent == tmp_path
+        assert result.stem.startswith(markdown_file.stem)
+        assert result.suffix == ".pdf"
+    finally:
+        result.unlink(missing_ok=True)
