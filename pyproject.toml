@@ -12,6 +12,7 @@ dependencies = [
     "weasyprint >= 60.0",
     "markdown >= 3.5.0",
     "inquirerpy>=0.3.4",
+    "rich>=13.0.0",
 ]
 
 [dependency-groups]

@@ -40,6 +40,12 @@ def main(
         "--css",
         help="Path to custom CSS file",
     ),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        "-o",
+        help="Output directory for generated PDF (defaults to current directory)",
+    ),
     list_available: bool = typer.Option(
         False,
         "--list",
@@ -55,7 +61,7 @@ def main(
 
     # If no markdown provided, launch TUI
     if markdown is None:
-        from pyresume.app import run_tui
+        from pyresume.tui import run_tui
 
         run_tui()
         return
@@ -83,8 +89,16 @@ def main(
         )
         raise typer.Exit(1)
 
+    if output is not None and not output.is_dir():
+        typer.echo(
+            typer.style(
+                f"Error: Output path is not a directory: {output}", fg=typer.colors.RED
+            )
+        )
+        raise typer.Exit(1)
+
     # Resolve CSS path
-    theme = active_themes[0] if active_themes else "minimal"
+    theme = active_themes[0] if active_themes else "clean"
     try:
         css_path = resolve_css(theme=theme if not css else None, css_path=css)
     except (ValueError, FileNotFoundError) as e:
@@ -93,13 +107,14 @@ def main(
 
     # Generate PDF
     try:
-        output_path = generate_pdf(
+        result = generate_pdf(
             markdown_path=markdown,
             css_path=css_path,
+            output_dir=output,
         )
         typer.echo(
             typer.style(
-                f"✓ PDF generated: {output_path}",
+                f"✓ PDF generated: {result}",
                 fg=typer.colors.GREEN,
             )
         )

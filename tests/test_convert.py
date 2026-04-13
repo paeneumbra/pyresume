@@ -45,22 +45,21 @@ def test_generate_pdf_empty_file(tmp_path):
 
 def test_generate_pdf_creates_file(markdown_file, css_file, tmp_path):
     """Test that generate_pdf creates a PDF file."""
-    output = tmp_path / "output.pdf"
-    result = generate_pdf(markdown_file, css_file, output)
-    assert result == output
-    assert output.exists()
-    assert output.stat().st_size > 0
+    result = generate_pdf(markdown_file, css_file, output_dir=tmp_path)
+    assert result.parent == tmp_path
+    assert result.stem.startswith(markdown_file.stem)
+    assert result.suffix == ".pdf"
+    assert result.stat().st_size > 0
 
 
 def test_generate_pdf_without_css(markdown_file, tmp_path):
     """Test PDF generation without CSS file."""
-    output = tmp_path / "output.pdf"
-    result = generate_pdf(markdown_file, css_path=None, output_path=output)
+    result = generate_pdf(markdown_file, css_path=None, output_dir=tmp_path)
     assert result.exists()
 
 
 def test_generate_pdf_default_output_path(markdown_file, tmp_path, monkeypatch):
-    """Test default output path (CWD with timestamp)."""
+    """Test default output path uses CWD with timestamp."""
     monkeypatch.chdir(tmp_path)
     result = generate_pdf(markdown_file)
     try:

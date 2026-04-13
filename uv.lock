@@ -371,6 +371,7 @@ source = { editable = "." }
 dependencies = [
     { name = "inquirerpy" },
     { name = "markdown" },
+    { name = "rich" },
     { name = "typer" },
     { name = "weasyprint" },
 ]
@@ -384,6 +385,7 @@ dev = [
 requires-dist = [
     { name = "inquirerpy", specifier = ">=0.3.4" },
     { name = "markdown", specifier = ">=3.5.0" },
+    { name = "rich", specifier = ">=13.0.0" },
     { name = "typer", specifier = ">=0.9.0" },
     { name = "weasyprint", specifier = ">=60.0" },
 ]

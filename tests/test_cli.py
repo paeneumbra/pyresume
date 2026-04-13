@@ -88,6 +88,33 @@ def test_cli_theme_and_css_error(markdown_file, css_file):
     assert "Cannot use both" in result.stdout
 
 
+def test_cli_with_slate_theme(markdown_file, tmp_path, monkeypatch):
+    """Test CLI with --slate theme."""
+    monkeypatch.chdir(tmp_path)
+    result = runner.invoke(app, [str(markdown_file), "--slate"])
+    assert result.exit_code == 0
+    assert "PDF generated" in result.stdout
+
+
+def test_cli_with_output_dir(markdown_file, tmp_path):
+    """Test CLI with --output directory."""
+    out_dir = tmp_path / "pdfs"
+    out_dir.mkdir()
+    result = runner.invoke(app, [str(markdown_file), "--output", str(out_dir)])
+    assert result.exit_code == 0
+    assert "PDF generated" in result.stdout
+    assert any(out_dir.iterdir())
+
+
+def test_cli_with_output_not_a_dir(markdown_file, tmp_path):
+    """Test error when --output path is not a directory."""
+    not_a_dir = tmp_path / "file.txt"
+    not_a_dir.write_text("x")
+    result = runner.invoke(app, [str(markdown_file), "--output", str(not_a_dir)])
+    assert result.exit_code == 1
+    assert "not a directory" in result.stdout.lower()
+
+
 def test_cli_nonexistent_markdown():
     """Test error on nonexistent markdown file."""
     result = runner.invoke(app, ["/nonexistent/resume.md"])

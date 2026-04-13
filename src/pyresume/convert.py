@@ -6,13 +6,15 @@ from pathlib import Path
 import markdown
 from weasyprint import HTML, CSS
 
+TIMESTAMP_FMT = "%Y%m%d%H%M%S"
+
 
 def markdown_to_html(markdown_path: Path) -> str:
     """Convert markdown file to HTML string."""
     with open(markdown_path, encoding="utf-8") as f:
         md_content = f.read()
 
-    html_body = markdown.markdown(md_content, extensions=["extra", "codehilite"])
+    html_body = markdown.markdown(md_content, extensions=["extra"])
 
     html_document = f"""<!DOCTYPE html>
 <html lang="en">
@@ -32,14 +34,14 @@ def markdown_to_html(markdown_path: Path) -> str:
 def generate_pdf(
     markdown_path: Path,
     css_path: Path | None = None,
-    output_path: Path | None = None,
+    output_dir: Path | None = None,
 ) -> Path:
     """Convert markdown to PDF with optional CSS styling.
 
     Args:
         markdown_path: Path to markdown resume file
         css_path: Path to CSS stylesheet (optional)
-        output_path: Output PDF path; defaults to same dir as input with timestamp
+        output_dir: Directory for the generated PDF; defaults to CWD
 
     Returns:
         Path to generated PDF
@@ -54,9 +56,9 @@ def generate_pdf(
     if markdown_path.stat().st_size == 0:
         raise ValueError(f"Markdown file is empty: {markdown_path}")
 
-    if output_path is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = Path.cwd() / f"{markdown_path.stem}_{timestamp}.pdf"
+    directory = output_dir if output_dir is not None else Path.cwd()
+    timestamp = datetime.now().strftime(TIMESTAMP_FMT)
+    output_path = directory / f"{markdown_path.stem}_{timestamp}.pdf"
 
     html_content = markdown_to_html(markdown_path)
     html = HTML(string=html_content)

@@ -13,12 +13,13 @@ console = Console()
 
 
 def find_markdown_files() -> list[Path]:
-    """Find all markdown files under CWD, excluding .venv and hidden dirs."""
+    """Find all markdown files under CWD, excluding .venv, hidden dirs, and READMEs."""
     cwd = Path.cwd()
     return sorted(
         p
         for p in cwd.rglob("*.md")
-        if not any(
+        if p.name.lower() not in {"readme.md", "changelog.md"}
+        and not any(
             part.startswith(".") or part in ("venv", ".venv")
             for part in p.relative_to(cwd).parts
         )
@@ -67,6 +68,8 @@ def run_tui() -> None:
                 markdown_path=markdown_path,
                 css_path=css_path,
             )
+        except KeyboardInterrupt:
+            raise
         except Exception as e:
             console.print(f"[red]Error:[/] {e}")
             return
