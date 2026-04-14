@@ -131,12 +131,14 @@ dmypy.json
 # IDE
 .idea
 .vscode
+.worktrees
 
 # AI
-.claude/
+.claude/.worktrees
 .junie/
 docs/
 
 # Private data
 /output/*
 /src/pyresume/resources/resume.md
+TODO.md
