@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.1.1 (2026-04-14)
+
+### 🐛 Fix
+
+- correct version configuration
+
 ## v4.1.0 (2026-04-14)
 
 ### 🚀 New Feature
