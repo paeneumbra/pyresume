@@ -2,7 +2,6 @@
 name = "pyresume"
 version = "4.0.3"
 description = "My python approach to building my resume from markdown"
-authors = [{ name = "Itzalak", email = "itzalak@tuta.io" }]
 readme = "README.md"
 keywords = ["curriculum", "resume"]
 license = "MIT"

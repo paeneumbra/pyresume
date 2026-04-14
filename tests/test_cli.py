@@ -40,26 +40,17 @@ def test_cli_help():
     assert "markdown" in result.stdout.lower()
 
 
-def test_cli_with_markdown_default_theme(markdown_file, tmp_path, monkeypatch):
-    """Test CLI with markdown file and default theme."""
+@pytest.mark.parametrize(
+    "theme_flag",
+    [None, "--minimal", "--clean", "--slate"],
+)
+def test_cli_with_theme(markdown_file, tmp_path, monkeypatch, theme_flag):
+    """Test CLI with various theme flags (or default)."""
     monkeypatch.chdir(tmp_path)
-    result = runner.invoke(app, [str(markdown_file)])
-    assert result.exit_code == 0
-    assert "PDF generated" in result.stdout
-
-
-def test_cli_with_minimal_theme(markdown_file, tmp_path, monkeypatch):
-    """Test CLI with --minimal theme."""
-    monkeypatch.chdir(tmp_path)
-    result = runner.invoke(app, [str(markdown_file), "--minimal"])
-    assert result.exit_code == 0
-    assert "PDF generated" in result.stdout
-
-
-def test_cli_with_clean_theme(markdown_file, tmp_path, monkeypatch):
-    """Test CLI with --clean theme."""
-    monkeypatch.chdir(tmp_path)
-    result = runner.invoke(app, [str(markdown_file), "--clean"])
+    args = [str(markdown_file)]
+    if theme_flag:
+        args.append(theme_flag)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     assert "PDF generated" in result.stdout
 
@@ -86,14 +77,6 @@ def test_cli_theme_and_css_error(markdown_file, css_file):
     )
     assert result.exit_code == 1
     assert "Cannot use both" in result.stdout
-
-
-def test_cli_with_slate_theme(markdown_file, tmp_path, monkeypatch):
-    """Test CLI with --slate theme."""
-    monkeypatch.chdir(tmp_path)
-    result = runner.invoke(app, [str(markdown_file), "--slate"])
-    assert result.exit_code == 0
-    assert "PDF generated" in result.stdout
 
 
 def test_cli_with_output_dir(markdown_file, tmp_path):

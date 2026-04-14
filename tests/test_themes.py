@@ -26,19 +26,13 @@ def test_list_themes_sorted():
     assert themes == sorted(themes)
 
 
-def test_get_theme_path_minimal():
-    """Test getting path to minimal theme."""
-    path = get_theme_path("minimal")
+@pytest.mark.parametrize("theme", list(BUILT_IN_THEMES.keys()))
+def test_get_theme_path(theme):
+    """Test getting path for each built-in theme."""
+    path = get_theme_path(theme)
     assert path.exists()
     assert path.suffix == ".css"
-    assert "minimal" in path.name
-
-
-def test_get_theme_path_all():
-    """Test getting path for all built-in themes."""
-    for theme in BUILT_IN_THEMES.keys():
-        path = get_theme_path(theme)
-        assert path.exists(), f"Theme {theme} not found at {path}"
+    assert theme in path.name
 
 
 def test_get_theme_path_invalid():
@@ -47,9 +41,10 @@ def test_get_theme_path_invalid():
         get_theme_path("nonexistent")
 
 
-def test_resolve_css_with_theme():
-    """Test resolving CSS via theme name."""
-    path = resolve_css(theme="minimal")
+@pytest.mark.parametrize("theme", list(BUILT_IN_THEMES.keys()))
+def test_resolve_css_with_theme(theme):
+    """Test resolving CSS via each built-in theme."""
+    path = resolve_css(theme=theme)
     assert path is not None
     assert path.exists()
 

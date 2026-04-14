@@ -35,7 +35,7 @@ Pass a markdown file directly to skip the wizard:
 pyresume path/to/resume.md
 ```
 
-Available theme flags: `--minimal` (default), `--clean`, `--slate`
+Available theme flags: `--minimal`, `--clean` (default), `--slate`
 
 ```shell
 pyresume path/to/resume.md --clean
@@ -51,14 +51,6 @@ List available built-in themes:
 
 ```shell
 pyresume --list
-```
-
-The generated PDF is saved in the project root with a timestamp, e.g. `resume_20260410_120000.pdf`.
-
-### Tests
-
-```shell
-uv run pytest
 ```
 
 ## Note

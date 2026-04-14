@@ -4,11 +4,12 @@ from pathlib import Path
 
 import typer
 
+from pyresume import __version__
 from pyresume.convert import generate_pdf
 from pyresume.themes import list_themes, resolve_css
 
 app = typer.Typer(
-    help="Convert markdown resume to PDF with customizable CSS themes.",
+    help=f"Convert markdown to PDF. (v{__version__})",
     no_args_is_help=False,
 )
 
@@ -52,7 +53,7 @@ def main(
         help="List available themes and exit",
     ),
 ) -> None:
-    """Convert markdown resume to PDF with customizable CSS themes."""
+    """Convert markdown to PDF with customizable CSS themes."""
     if list_available:
         typer.echo("Available themes:")
         for theme in list_themes():
@@ -129,6 +130,9 @@ def main(
             )
         )
         raise typer.Exit(1)
+
+
+main.__doc__ = f"Convert markdown to PDF. (v{__version__})"
 
 
 if __name__ == "__main__":
