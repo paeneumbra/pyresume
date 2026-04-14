@@ -1,5 +1,20 @@
 # Changelog
 
+## v4.1.0 (2026-04-14)
+
+### 🚀 New Feature
+
+- **rewrite**: rewrite package and replace md2pdf
+
+### 🧹 Chore
+
+- **claude**: setup claude
+- **output**: add output to tui
+- **uv**: plugin bump
+- **prek**: plugin bump
+- **review**: apply review
+- **review**: improve tests and path
+
 ## v4.0.3 (2025-12-06)
 
 ### Changed
