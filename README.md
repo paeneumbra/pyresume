@@ -9,8 +9,6 @@ lost...
 
 - Python 3.13+
 - UV
-- Pre-commit
-- Commitizen
 - Weasyprint (requires system libraries — see note below)
 
 ## Instructions
